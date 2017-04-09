@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pulse - HTML 5 Visualizer</title>
+    <style>
+    	input {
+    		display: block;
+    	}
+    	audio {
+    		display: none;
+    		position: relative;
+    	}
+    	.visualizer_wrapper {
+    		min-width: 320px;
+    		height: 200px;
+    		display: inline-block;
+    		margin-top: 20px;
+    	}
+    	.visualizer_wrapper .visualizer_nodes {
+			width: 10px;
+			height: 0px;
+			background-color: #ababab;
+			float: left;
+			margin-right: 2px;
+    	}
+    </style>
+</head>
+<body>
+
+	<input id="source" type="file" name="source">
+    <audio id="player" type="audio/mp3" controls="controls"></audio>
+
+    <script type="text/javascript" src="pulse.js"></script>
+    <script type="text/javascript">
+		source.onchange = function(){
+			var files = this.files,
+				file  = URL.createObjectURL(files[0]);
+			
+			player.src = file;
+		    player.play();
+	    	Pulse.init('bars');
+		};
+    </script>
+
+</body>
+</html>
