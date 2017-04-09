@@ -82,6 +82,8 @@ var Pulse = {
 		callback(streams);
 	},
 	visualizer: function(callback) {
+		// delete document.querySelector('.visualizer_wrapper');
+
 		var element  = '',
 			bits     = 32, // Default bit point from FFTSize / 2
 			wrapper  = document.createElement('div'),
