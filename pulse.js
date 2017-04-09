@@ -33,11 +33,17 @@ var Pulse = {
 	start: function(visualizer) {
 		var AudioContext = window.AudioContext || window.webkitAudioContext,
 			context      = new AudioContext(),
-			analyser     = context.createAnalyser();
+			analyser     = context.createAnalyser(),
+			self         = this;
 
 		this.getElement(this.config.parse, function(res) {
 			res.addEventListener("canplay", function() {
-			    var source = context.createMediaElementSource(res);
+			    if (self.isUndefined(context.mediaElement)) {
+			    	var source = context.createMediaElementSource(res);
+			    } else {
+			    	var source = context;
+			    }
+			    
 			    source.connect(analyser);
 
 				// console.log(analyser.fftSize); // 2048 by default
@@ -82,32 +88,36 @@ var Pulse = {
 		callback(streams);
 	},
 	visualizer: function(callback) {
-		// delete document.querySelector('.visualizer_wrapper');
+		var visualizer = document.querySelector('.visualizer_wrapper');
 
-		var element  = '',
-			bits     = 32, // Default bit point from FFTSize / 2
-			wrapper  = document.createElement('div'),
-			fragment = document.createDocumentFragment();
+		if (visualizer !== null) {
+			callback('Visualizer ready!');
+		} else {
+			var element  = '',
+				bits     = 32, // Default bit point from FFTSize / 2
+				wrapper  = document.createElement('div'),
+				fragment = document.createDocumentFragment();
 
-		wrapper.className = 'visualizer_wrapper';
+			wrapper.className = 'visualizer_wrapper';
 
-		this.getElement(this.config.parse, function(res) {
-			element = res;
-		});
+			this.getElement(this.config.parse, function(res) {
+				element = res;
+			});
 
-		for (var i = 1; i <= bits; i++) {
-			var nodes = document.createElement('div');
+			for (var i = 1; i <= bits; i++) {
+				var nodes = document.createElement('div');
+				
+				nodes.className = 'visualizer_nodes';
+				nodes.setAttribute('data-id', i);
+				fragment.appendChild(nodes);
+
+				this.config.nodes = nodes;
+			}
 			
-			nodes.className = 'visualizer_nodes';
-			nodes.setAttribute('data-id', i);
-			fragment.appendChild(nodes);
+			wrapper.appendChild(fragment);
+			element.parentNode.insertBefore(wrapper, element.nextSibling);
 
-			this.config.nodes = nodes;
+			callback('Visualizer ready!');
 		}
-		
-		wrapper.appendChild(fragment);
-		element.parentNode.insertBefore(wrapper, element.nextSibling);
-
-		callback('Visualizer ready!');
 	}
 }
