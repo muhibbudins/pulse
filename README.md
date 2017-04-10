@@ -1,7 +1,7 @@
 # Pulse
 HTML 5 Song Visualizer from local file pure Vanilla JS (still develop for more theme and feature)
 
-[Demo Here](https://muhibbudins.github.io/Pulse/)
+<!-- [Demo Here](https://muhibbudins.github.io/Pulse/) -->
 
 [Browser Support](http://caniuse.com/#feat=audio-api)
 
