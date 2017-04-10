@@ -12,16 +12,18 @@ var Pulse = {
 	/*
 	 * All configuration start here
 	 *
-	 * @type : Type of visualizer (default bars)
+	 * @type    : Type of visualizer (default bars)
 	 * @element : Source audio context in audio tag (Default #player)
-	 * @parse : Element initialize for detection selector type
-	 * @nodes : Visualizer bars element
-	 * @debug : Start debuging get byte of frequency
+	 * @visual  : Target for visualize bars
+	 * @parse   : Element initialize for detection selector type
+	 * @nodes   : Visualizer bars element
+	 * @debug   : Start debuging get byte of frequency
 	 * 
 	 */
 	config: {
 		type    : 'bars',
 		element : '#player',
+		visual  : '#visualizer',
 		parse   : '',
 		nodes   : '',
 		debug   : false
@@ -53,6 +55,13 @@ var Pulse = {
 		if (!self.isUndefined(params.debug)) {
 			self.config.debug = params.debug;
 		}
+		
+		/*
+		 * Set default target visualize
+		 */
+		if (!self.isUndefined(params.target)) {
+			self.config.visual = params.target;
+		}
 
 		/*
 		 * Set default type
@@ -60,15 +69,10 @@ var Pulse = {
 		self.config.type = params.type;
 
 		/*
-		 * Start detection selector type of element source
-		 */
-		self.detect();
-
-		/*
 		 * Starting visualizer
 		 */
 		self.visualizer(function() {
-			var bars = document.querySelectorAll('.visualizer_nodes');
+			var bars = document.querySelectorAll('.visualizer__nodes');
 
 			/*
 			 * Start stream audio context
@@ -78,25 +82,16 @@ var Pulse = {
 	},
 
 	/*
-	 * Returning type of selector
-	 */
-	detect: function() {
-		var element      = this.config.element,
-			parse        = element.substr(0,1);
-		
-		return this.config.parse = parse;
-	},
-
-	/*
 	 * Start stream Audio Context
 	 */
 	stream: function(visualizer) {
 		var AudioContext = window.AudioContext || window.webkitAudioContext,
 			context      = new AudioContext(),
 			analyser     = context.createAnalyser(),
+			element      = this.config.element,
 			self         = this;
 
-		self.getElement(self.config.parse, function(res) {
+		self.getElement(element, function(res) {
 			res.addEventListener("canplay", function() {
 			    if (self.isUndefined(context.mediaElement)) {
 			    	var source = context.createMediaElementSource(res);
@@ -154,9 +149,10 @@ var Pulse = {
 	/*
 	 * Getting element from parse
 	 */
-	getElement: function(parse, callback) {
+	getElement: function(element, callback) {
 		var streams = '',
-			element = this.config.element.substring(1);
+			parse   = element.substring(0,1),
+			element = element.substring(1);
 
 		if (parse == '#') {
 			streams = document.getElementById(element);
@@ -173,26 +169,21 @@ var Pulse = {
 	 * Starting visualizer initialize
 	 */
 	visualizer: function(callback) {
-		var visualizer = document.querySelector('.visualizer_wrapper');
+		var visualizer = document.querySelector('.visualizer__wrapper');
 
 		if (visualizer !== null) {
 			callback('Visualizer ready!');
 		} else {
-			var element  = '',
-				byte     = 32, // Default byte point from FFTSize / 2
+			var byte     = 32, // Default byte point from FFTSize / 2
 				wrapper  = document.createElement('div'),
 				fragment = document.createDocumentFragment();
 
-			wrapper.className = 'visualizer_wrapper';
-
-			this.getElement(this.config.parse, function(res) {
-				element = res;
-			});
+			wrapper.className = 'visualizer__wrapper';
 
 			for (var i = 1; i <= byte; i++) {
 				var nodes = document.createElement('div');
 				
-				nodes.className = 'visualizer_nodes';
+				nodes.className = 'visualizer__nodes nodes--' + i;
 				nodes.setAttribute('data-id', i);
 				fragment.appendChild(nodes);
 
@@ -200,9 +191,10 @@ var Pulse = {
 			}
 			
 			wrapper.appendChild(fragment);
-			element.parentNode.insertBefore(wrapper, element.nextSibling);
-
-			callback('Visualizer ready!');
+			this.getElement(this.config.visual, function(res) {
+				res.appendChild(wrapper);
+				callback('Visualizer ready!');
+			});
 		}
 	}
 }
