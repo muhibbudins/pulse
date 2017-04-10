@@ -1,7 +1,9 @@
+![Pulse Visualizer](https://github.com/muhibbudins/Pulse/blob/master/preview.png)
+
 # Pulse
 HTML 5 Song Visualizer from local file pure Vanilla JS (still develop for more theme and feature)
 
-<!-- [Demo Here](https://muhibbudins.github.io/Pulse/) -->
+[Demo Here](https://muhibbudins.github.io/Pulse/)
 
 [Browser Support](http://caniuse.com/#feat=audio-api)
 
@@ -9,7 +11,7 @@ HTML 5 Song Visualizer from local file pure Vanilla JS (still develop for more t
 Currently nothing to show here, just choose your music from input file and visualizer will be show.
 
 ## How it Works?
-I will explain later
+I will explain later :D
 
 ## License
 This project under MIT License
