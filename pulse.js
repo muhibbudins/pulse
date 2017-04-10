@@ -1,42 +1,102 @@
+/*
+ * Pulse
+ * HTML 5 Song Visualizer (Using Audio Context)
+ *
+ * Author : Muhibbudin Suretno
+ * Date : April 9, 2017
+ * License : MIT
+ * 
+ */
 var Pulse = {
+
+	/*
+	 * All configuration start here
+	 *
+	 * @type : Type of visualizer (default bars)
+	 * @element : Source audio context in audio tag (Default #player)
+	 * @parse : Element initialize for detection selector type
+	 * @nodes : Visualizer bars element
+	 * @debug : Start debuging get byte of frequency
+	 * 
+	 */
 	config: {
 		type    : 'bars',
 		element : '#player',
 		parse   : '',
-		nodes   : ''
+		nodes   : '',
+		debug   : false
 	},
+
+	/*
+	 * isUndefined() function will return true if paramter realy undefined
+	 */
 	isUndefined: function(param) {
 		return typeof param == 'undefined';
 	},
-	init: function(type, element) {
+
+	/*
+	 * Initialize Pulse class and throw parameter from user
+	 */
+	init: function(params) {
 		var self = this;
 		
-		if (!this.isUndefined(element)) {
-			this.config.element = element;
+		/*
+		 * Set default element source
+		 */
+		if (!self.isUndefined(params.source)) {
+			self.config.element = params.source;
+		}
+		
+		/*
+		 * Set default debug type
+		 */
+		if (!self.isUndefined(params.debug)) {
+			self.config.debug = params.debug;
 		}
 
-		this.config.type = type;
-		this.stream();
-		this.visualizer(function() {
+		/*
+		 * Set default type
+		 */
+		self.config.type = params.type;
+
+		/*
+		 * Start detection selector type of element source
+		 */
+		self.detect();
+
+		/*
+		 * Starting visualizer
+		 */
+		self.visualizer(function() {
 			var bars = document.querySelectorAll('.visualizer_nodes');
-			self.start(bars);
+
+			/*
+			 * Start stream audio context
+			 */
+			self.stream(bars);
 		});
 	},
-	stream: function() {
+
+	/*
+	 * Returning type of selector
+	 */
+	detect: function() {
 		var element      = this.config.element,
-			streams      = '',
-			parse        = element.substr(0,1),
-			_self        = this;
+			parse        = element.substr(0,1);
 		
-		this.config.parse = parse;
+		return this.config.parse = parse;
 	},
-	start: function(visualizer) {
+
+	/*
+	 * Start stream Audio Context
+	 */
+	stream: function(visualizer) {
 		var AudioContext = window.AudioContext || window.webkitAudioContext,
 			context      = new AudioContext(),
 			analyser     = context.createAnalyser(),
 			self         = this;
 
-		this.getElement(this.config.parse, function(res) {
+		self.getElement(self.config.parse, function(res) {
 			res.addEventListener("canplay", function() {
 			    if (self.isUndefined(context.mediaElement)) {
 			    	var source = context.createMediaElementSource(res);
@@ -46,9 +106,8 @@ var Pulse = {
 			    
 			    source.connect(analyser);
 
-				// console.log(analyser.fftSize); // 2048 by default
-				// console.log(analyser.frequencyBinCount); // will give us 1024 data points
-				// console.log(analyser.frequencyBinCount); // fftSize/2 = 32 data points
+				// console.log(analyser.fftSize);
+				// console.log(analyser.frequencyBinCount);
 
 			    analyser.connect(context.destination);
 				analyser.fftSize = 64;
@@ -57,22 +116,44 @@ var Pulse = {
 				analyser.getByteFrequencyData(frequencyData);
 
 				function update() {
+					/*
+					 * Requesting animation frame
+					 */
 				    requestAnimationFrame(update);
 
+				    /*
+				     * Getting frequenxy byte from analyser
+				     */
 				    analyser.getByteFrequencyData(frequencyData);
-				    // console.log(frequencyData)
 
+				    /*
+				     * Starting debuging
+				     */
+				    if (self.config.debug) {
+				    	console.log(frequencyData)
+				    }
+
+				    /*
+				     * Changing element style
+				     */
 					for (var i = 0; i < visualizer.length; i++) {
 				        visualizer[i].style.height = frequencyData[i] + 'px';
 					}
 				};
 
+				/*
+				 * Timeout update for 1 ms
+				 */
 				setTimeout(function() {
 					update();
 				}, 100)
 			});
 		})
 	},
+
+	/*
+	 * Getting element from parse
+	 */
 	getElement: function(parse, callback) {
 		var streams = '',
 			element = this.config.element.substring(1);
@@ -87,6 +168,10 @@ var Pulse = {
 
 		callback(streams);
 	},
+
+	/*
+	 * Starting visualizer initialize
+	 */
 	visualizer: function(callback) {
 		var visualizer = document.querySelector('.visualizer_wrapper');
 
@@ -94,7 +179,7 @@ var Pulse = {
 			callback('Visualizer ready!');
 		} else {
 			var element  = '',
-				bits     = 32, // Default bit point from FFTSize / 2
+				byte     = 32, // Default byte point from FFTSize / 2
 				wrapper  = document.createElement('div'),
 				fragment = document.createDocumentFragment();
 
@@ -104,7 +189,7 @@ var Pulse = {
 				element = res;
 			});
 
-			for (var i = 1; i <= bits; i++) {
+			for (var i = 1; i <= byte; i++) {
 				var nodes = document.createElement('div');
 				
 				nodes.className = 'visualizer_nodes';
