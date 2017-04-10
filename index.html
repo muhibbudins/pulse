@@ -59,6 +59,27 @@
         </div>
     </section>
 
+<!-- 
+    <input id="source" type="file" name="source">
+    <audio id="asd" type="audio/mp3" controls="controls"></audio>
+
+    <script type="text/javascript" src="pulse.js"></script>
+    <script type="text/javascript">
+        source.onchange = function(){
+            var files = this.files,
+                file  = URL.createObjectURL(files[0]);
+            
+            asd.src = file;
+            asd.play();
+            
+            var wave = Pulse.init({
+                type: 'bars',
+                source: '#asd',
+                debug: false
+            });
+        };
+    </script>
+ -->
 
     <!-- Import Vendor Script -->
     <script type="text/javascript" src="js/jquery.min.js"></script>
