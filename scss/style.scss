@@ -20,15 +20,47 @@
 			opacity: 1;
 		}
 	}
-	.visualizer__wrapper {
+	.pulse__wrapper {
 		min-height: 300px;
 		position: relative;
 		width: 480px;
 		display: block;
 		margin: 0 auto;
+	}
+	.pulse__song {
+	    position: absolute;
+	    z-index: 10;
+	    left: 50%;
+	    margin-left: -70px;
+	    top: 50%;
+	    margin-top: -90px;
+	    text-align: center;
+	    padding: 10px;
+	    background-color: rgba(255, 78, 34, 0.48);
+	    border-radius: 10px;
+
+		.pulse__song--image {
+		    border-radius: 50%;
+		    width: 120px;
+		    height: 120px;
+		    overflow: hidden;
+		    opacity: 0.6;
+		    margin-bottom: 15px;
+		}
+		.pulse__song--title {
+		    color: #ffffff;
+		    font-weight: bold;
+		    font-size: 16px;
+		    line-height: normal;
+		}
+		.pulse__song--artist {
+    		color: #fff;
+		}
+	}
+	.pulse__inner {
 
 		@for $i from 1 through 32 {
-			.nodes--#{$i} {
+			.pulse__nodes--#{$i} {
 				position: absolute;
 				bottom: 0;
 				height: 0;

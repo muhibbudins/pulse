@@ -40,7 +40,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <div id="visualizer" class="visualizer"></div>
+                    <div id="visualizer" class="visualizer">
+                    </div>
                     <audio id="audio" type="audio/mp3" controls="controls"></audio>
 
                     <div class="source">
@@ -53,22 +54,16 @@
     </section>
 
     <!-- Import Vendor Script -->
+    <script type="text/javascript" src="js/jdataview.js"></script>
     <script type="text/javascript" src="js/pulse.js"></script>
     <script type="text/javascript">
-        source.onchange = function(){
-            var files = this.files,
-                file  = URL.createObjectURL(files[0]);
-            
-            audio.src = file;
-            audio.play();
-            
-            var wave = Pulse.init({
-                type: 'bars',
-                source: '#audio',
-                target: '#visualizer',
-                debug: false
-            });
-        };
+        var wave = Pulse.init({
+            type   : 'bars',
+            player : '#audio',
+            source : '#source',
+            target : '#visualizer',
+            debug  : false
+        });
     </script>
 </body>
 </html>

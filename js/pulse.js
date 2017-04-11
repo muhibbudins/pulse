@@ -13,20 +13,22 @@ var Pulse = {
 	 * All configuration start here
 	 *
 	 * @type    : Type of visualizer (default bars)
-	 * @element : Source audio context in audio tag (Default #player)
-	 * @visual  : Target for visualize bars
+	 * @player  : Source audio context in audio tag (Default #player)
+	 * @target  : Target for visualize bars
 	 * @parse   : Element initialize for detection selector type
-	 * @nodes   : Visualizer bars element
+	 * @nodes   : Visualizer bars player
 	 * @debug   : Start debuging get byte of frequency
 	 * 
 	 */
 	config: {
 		type    : 'bars',
-		element : '#player',
-		visual  : '#visualizer',
+		player  : '#player',
+		source  : '#source',
+		target  : '#visualizer',
 		parse   : '',
 		nodes   : '',
-		debug   : false
+		debug   : false,
+		song    : {}
 	},
 
 	/*
@@ -41,12 +43,33 @@ var Pulse = {
 	 */
 	init: function(params) {
 		var self = this;
+
+		/*
+		 * Set default type
+		 */
+		if (!self.isUndefined(params.type)) {
+			self.config.type = params.type;
+		}
+		
+		/*
+		 * Set default player player
+		 */
+		if (!self.isUndefined(params.player)) {
+			self.config.player = params.player;
+		}
 		
 		/*
 		 * Set default element source
 		 */
 		if (!self.isUndefined(params.source)) {
-			self.config.element = params.source;
+			self.config.source = params.source;
+		}
+		
+		/*
+		 * Set default target visualize
+		 */
+		if (!self.isUndefined(params.target)) {
+			self.config.target = params.target;
 		}
 		
 		/*
@@ -55,30 +78,54 @@ var Pulse = {
 		if (!self.isUndefined(params.debug)) {
 			self.config.debug = params.debug;
 		}
-		
-		/*
-		 * Set default target visualize
-		 */
-		if (!self.isUndefined(params.target)) {
-			self.config.visual = params.target;
-		}
 
-		/*
-		 * Set default type
-		 */
-		self.config.type = params.type;
+		self.getElement(self.config.source, function(source) {
+		    source.onchange = function(){
+		        var files = this.files,
+		            file  = URL.createObjectURL(files[0]);
+		        
+		        self.getElement(self.config.player, function(audio) {	        	
+					var reader   = new FileReader(),
+						song     = {},
+						dataView = '';
 
-		/*
-		 * Starting visualizer
-		 */
-		self.visualizer(function() {
-			var bars = document.querySelectorAll('.visualizer__nodes');
+			        audio.src = file;
+			        audio.play();
 
-			/*
-			 * Start stream audio context
-			 */
-			self.stream(bars);
-		});
+					/*
+					 * Starting visualizer
+					 */
+					self.visualizer(function() {
+						var bars = document.querySelectorAll('.pulse__nodes');
+
+						/*
+						 * Start stream audio context
+						 */
+						self.stream(bars);
+					});
+
+			        reader.onload = function(e) {
+			            dataView = new jDataView(this.result);
+
+			            if (dataView.getString(3, dataView.byteLength - 128) == 'TAG') {
+							// song.title  = dataView.getString(30, dataView.tell());
+							// song.artist = dataView.getString(30, dataView.tell());
+							// song.album  = dataView.getString(30, dataView.tell());
+							// song.year   = dataView.getString(4, dataView.tell());
+							document.querySelector('.pulse__song--image').innerHTML = '<img src="img/120x120.png" alt="Dummy Image" />';
+							document.querySelector('.pulse__song--title').innerHTML = dataView.getString(30, dataView.tell());
+							document.querySelector('.pulse__song--artist').innerHTML = dataView.getString(30, dataView.tell());
+			            } else {
+			                // console.log('No ID3v1 song found');
+			            }
+			        };
+
+			        reader.readAsArrayBuffer(files[0]);
+
+			        self.config.song = song;
+		        })
+		    };
+		})
 	},
 
 	/*
@@ -88,7 +135,7 @@ var Pulse = {
 		var AudioContext = window.AudioContext || window.webkitAudioContext,
 			context      = new AudioContext(),
 			analyser     = context.createAnalyser(),
-			element      = this.config.element,
+			element      = this.config.player,
 			self         = this;
 
 		self.getElement(element, function(res) {
@@ -100,9 +147,6 @@ var Pulse = {
 			    }
 			    
 			    source.connect(analyser);
-
-				// console.log(analyser.fftSize);
-				// console.log(analyser.frequencyBinCount);
 
 			    analyser.connect(context.destination);
 				analyser.fftSize = 64;
@@ -169,29 +213,55 @@ var Pulse = {
 	 * Starting visualizer initialize
 	 */
 	visualizer: function(callback) {
-		var visualizer = document.querySelector('.visualizer__wrapper');
+		var visualizer = document.querySelector('.pulse__wrapper');
 
 		if (visualizer !== null) {
 			callback('Visualizer ready!');
 		} else {
-			var byte     = 32, // Default byte point from FFTSize / 2
-				wrapper  = document.createElement('div'),
-				fragment = document.createDocumentFragment();
+			var byte         = 32, // Default byte point from FFTSize / 2
+				wrapper      = document.createElement('div'),
+				wrapperSong  = document.createElement('div'),
+				songImage    = document.createElement('div'),
+				songTitle    = document.createElement('div'),
+				songArtist   = document.createElement('div'),
+				wrapperInner = document.createElement('div'),
+				fragment     = document.createDocumentFragment(),
 
-			wrapper.className = 'visualizer__wrapper';
+				song         = this.config.song;
+
+			wrapper.className     = 'pulse__wrapper';
+			
+			wrapperSong.className = 'pulse__song';
+			songImage.className   = 'pulse__song--image';
+			songTitle.className   = 'pulse__song--title';
+			songArtist.className  = 'pulse__song--artist';
+			
+			songImage.innerHTML   = '';
+			songTitle.innerHTML   = '';
+			songArtist.innerHTML  = '';
+
+			wrapperSong.appendChild(songImage);
+			wrapperSong.appendChild(songTitle);
+			wrapperSong.appendChild(songArtist);
+
+			wrapperInner.className = 'pulse__inner';
 
 			for (var i = 1; i <= byte; i++) {
 				var nodes = document.createElement('div');
 				
-				nodes.className = 'visualizer__nodes nodes--' + i;
+				nodes.className = 'pulse__nodes pulse__nodes--' + i;
 				nodes.setAttribute('data-id', i);
 				fragment.appendChild(nodes);
 
 				this.config.nodes = nodes;
 			}
 			
-			wrapper.appendChild(fragment);
-			this.getElement(this.config.visual, function(res) {
+			wrapperInner.appendChild(fragment);
+
+			wrapper.appendChild(wrapperSong);
+			wrapper.appendChild(wrapperInner);
+
+			this.getElement(this.config.target, function(res) {
 				res.appendChild(wrapper);
 				callback('Visualizer ready!');
 			});
