@@ -85,9 +85,7 @@ var Pulse = {
 		            file  = URL.createObjectURL(files[0]);
 		        
 		        self.getElement(self.config.player, function(audio) {	        	
-					var reader   = new FileReader(),
-						song     = {},
-						dataView = '';
+					var song     = {};
 
 			        audio.src = file;
 			        audio.play();
@@ -104,28 +102,42 @@ var Pulse = {
 						self.stream(bars);
 					});
 
-			        reader.onload = function(e) {
-			            dataView = new jDataView(this.result);
+					id3(files[0], function(err, tags) {
+						console.log(err, tags);
+						if (!err) {
+							document.querySelector('.pulse__song--title').innerHTML = tags.title;
+							document.querySelector('.pulse__song--artist').innerHTML = tags.artist;
 
-			            if (dataView.getString(3, dataView.byteLength - 128) == 'TAG') {
-							// song.title  = dataView.getString(30, dataView.tell());
-							// song.artist = dataView.getString(30, dataView.tell());
-							// song.album  = dataView.getString(30, dataView.tell());
-							// song.year   = dataView.getString(4, dataView.tell());
-							document.querySelector('.pulse__song--image').innerHTML = '<img src="img/120x120.png" alt="Dummy Image" />';
-							document.querySelector('.pulse__song--title').innerHTML = dataView.getString(30, dataView.tell());
-							document.querySelector('.pulse__song--artist').innerHTML = dataView.getString(30, dataView.tell());
-			            } else {
-			                // console.log('No ID3v1 song found');
-			            }
-			        };
+							if (!self.isUndefined(tags.v2.image)) {
+								self.arrayBufferToBase64(new Uint8Array(tags.v2.image.data), function(res) {
+									setTimeout(function() {
+										document.querySelector('.pulse__song--image').innerHTML = '<img src="data:'+ tags.v2.image.mime +';base64,'+ res +'" alt="Dummy Image" />';
+									}, 3000);
+								})
+							} else {
+								document.querySelector('.pulse__song--image').innerHTML = '<img src="img/120x120.png" alt="Dummy Image" />';
+							}
+						}
+					});
 
-			        reader.readAsArrayBuffer(files[0]);
 
 			        self.config.song = song;
 		        })
 		    };
 		})
+	},
+
+	/*
+	 * Converting array buffer to base64 string
+	 */
+	arrayBufferToBase64(buffer, callback) {
+	    var binary = '';
+	    var bytes = new Uint8Array( buffer );
+	    var len = bytes.byteLength;
+	    for (var i = 0; i < len; i++) {
+	        binary += String.fromCharCode( bytes[ i ] );
+	    }
+	    callback(window.btoa( binary ));
 	},
 
 	/*
@@ -140,6 +152,7 @@ var Pulse = {
 
 		self.getElement(element, function(res) {
 			res.addEventListener("canplay", function() {
+				console.log(context);
 			    if (self.isUndefined(context.mediaElement)) {
 			    	var source = context.createMediaElementSource(res);
 			    } else {

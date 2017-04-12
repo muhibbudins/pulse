@@ -2,12 +2,17 @@
 @import "global/function.scss";
 
 .hero {
-	background: #ff4b1f;  /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #ff9068, #ff4b1f);  /* Chrome 10-25, Safari 5.1-6 */
-	background: linear-gradient(to right, #ff9068, #ff4b1f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	background: #7474BF;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to left, #348AC7, #7474BF);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to left, #348AC7, #7474BF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 	height: 100vh;
 	width: 100%;
-	@include flex();
+	padding-top: 10%;
+	
+	@media (min-width: 768px) {
+		padding-top: 0;
+		@include flex();
+	}
 
 	.visualizer {
 		width: 100%;
@@ -31,30 +36,49 @@
 	    position: absolute;
 	    z-index: 10;
 	    left: 50%;
-	    margin-left: -70px;
+	    margin-left: -95px;
 	    top: 50%;
 	    margin-top: -90px;
 	    text-align: center;
-	    padding: 10px;
-	    background-color: rgba(255, 78, 34, 0.48);
+	    padding: 20px 10px;
+	    background-color: transparentize(#527FC3, 0.4);
 	    border-radius: 10px;
 
+		@keyframes spin {
+			100% {
+				-webkit-transform: rotate(360deg);
+				transform:rotate(360deg);
+			}
+		}
 		.pulse__song--image {
+			margin: 0 auto;
 		    border-radius: 50%;
 		    width: 120px;
 		    height: 120px;
 		    overflow: hidden;
 		    opacity: 0.6;
 		    margin-bottom: 15px;
+		    animation:spin 8s linear infinite;
+
+		    img {
+			    width: 100%;
+			    height: auto;
+		    }
 		}
-		.pulse__song--title {
-		    color: #ffffff;
-		    font-weight: bold;
-		    font-size: 16px;
-		    line-height: normal;
+		.pulse__song--title,
+		.pulse__song--artist {
+			color: #ffffff;
+			font-weight: bold;
+			font-size: 16px;
+			line-height: normal;
+			width: 180px;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
 		}
 		.pulse__song--artist {
-    		color: #fff;
+			font-weight: normal;
+			font-size: 14px;
 		}
 	}
 	.pulse__inner {
@@ -66,6 +90,8 @@
 				height: 0;
 				width: 12px;
 				background-color: $white;
+				border-top-right-radius: 5px;
+				border-top-left-radius: 5px;
 
 				@if $i == 1 {
 					left: 0px;
@@ -101,7 +127,7 @@
 			}
 			&:hover {
 				background-color: $white;
-				color: $alizarin;
+				color: #527FC3;
 			}
 		}
 	}
