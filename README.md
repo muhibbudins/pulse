@@ -1,5 +1,3 @@
-// ![Pulse Visualizer](https://github.com/muhibbudins/Pulse/blob/master/preview.png)
-
 # Pulse
 HTML 5 Song Player base on Bootstrap and Vanilla JS. Currently i not use jQuery just HTML 5 & JS for player and visualizer.
 
