@@ -1,7 +1,5 @@
-![Pulse Visualizer](https://github.com/muhibbudins/Pulse/blob/master/preview.png)
-
 # Pulse
-HTML 5 Song Visualizer from local file pure Vanilla JS (still develop for more theme and feature)
+HTML 5 Song Player base on Bootstrap and Vanilla JS. Currently i not use jQuery just HTML 5 & JS for player and visualizer.
 
 [Demo Here](https://muhibbudins.github.io/Pulse/)
 
@@ -10,8 +8,26 @@ HTML 5 Song Visualizer from local file pure Vanilla JS (still develop for more t
 ## Docs
 Currently nothing to show here, just choose your music from input file and visualizer will be show.
 
-## How it Works?
-I will explain later :D
+## Feature
+- Visualizer using Audio Context
+- Player using Audio Tag HTML 5
+- Play song using input file
+- Showing meta data file using ID3 JS
 
-## License
-This project under MIT License
+## Todos
+- New player design
+- New visualizer design
+- Playlist song
+- Search song
+- Third APIs
+
+## Third Party Library
+- ID3 JS
+- Bootstrap
+- Animate CSS
+
+## About License
+This project will be open source everytime and i hope this project always under MIT License (feel free to contribute, changing, sublicense and everything what you want). Thanks for coming and see my project.
+
+## Author
+Feel free to ask just touch me at [muhibbudinsuretno1@gmail.com](mailto:muhibbudinsuretno1@gmail.com),
