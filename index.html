@@ -5,22 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Pulse - HTML 5 Visualizer</title>
+    <title>Pulse Player</title>
 
     <!-- Meta Tags for SEO -->
     <meta property="og:title" content="Pulse"/>
     <meta property="og:url" content="https://muhibbudins.github.io/Pulse/"/>
     <meta property="og:image" content="https://muhibbudins.github.io/Pulse/preview.png"/>
-    <meta property="og:description" content="HTML 5 Song Visualizer from local file pure Vanilla JS "/>
+    <meta property="og:description" content="HTML 5 Audio Player"/>
 
     <meta name="twitter:creator" content="Muhibbudin Suretno"/>
     <meta name="twitter:title" content="Pulse"/>
     <meta name="twitter:url" content="https://muhibbudins.github.io/Pulse/"/>
-    <meta name="twitter:description" content="HTML 5 Song Visualizer from local file pure Vanilla JS "/>
+    <meta name="twitter:description" content="HTML 5 Audio Player"/>
     <meta name="twitter:image" content="https://muhibbudins.github.io/Pulse/preview.png"/>
 
     <meta itemprop="name" content="Pulse"/>
-    <meta itemprop="description" content="HTML 5 Song Visualizer from local file pure Vanilla JS "/>
+    <meta itemprop="description" content="HTML 5 Audio Player"/>
     <meta itemprop="image" content="https://muhibbudins.github.io/Pulse/preview.png"/>
 
     <!--[if lt IE 9]>
@@ -32,38 +32,37 @@
     <link rel="stylesheet" href="css/animate.min.css">
 
     <!-- Import Custom Style -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/default.css">
 </head>
-
 <body>
-    <section class="hero">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <div id="visualizer" class="visualizer">
-                    </div>
-                    <audio id="audio" type="audio/mp3" controls="controls"></audio>
-
-                    <div class="source">
-                        <input id="source" type="file" class="form-control hidden" accept="audio/mp3">
-                        <label for="source" class="btn btn-default source-file"><i class="fa fa-play"></i> Choose Your Song</label>
-                    </div>
-                </div>
+    <!-- Header -->
+    <div class="navbar navbar-default navbar-fixed-top pulse-header">
+        <div class="container-fluid">
+            <div class="navbar-brand col-md-2">
+                <a href="">asdasd</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="">asdasd</a></li>
+                <li><a href="">asdasd</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- Player -->
+    <div class="navbar navbar-default navbar-fixed-bottom pulse-player">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci distinctio odit, numquam, alias temporibus est qui! Corporis alias ratione cum assumenda. Amet magni doloremque totam ea officia, facilis tenetur provident?
+    </div>
+    <!-- Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 pulse-sidebar">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sequi cum tempore laborum molestiae corporis nisi non, praesentium doloribus aliquam sapiente esse voluptatibus sint quo, modi quaerat ea porro distinctio illo!
+            </div>
+            <div class="col-md-10 pulse-content">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet a adipisci, cumque beatae totam quos ipsam non obcaecati quae asperiores? Saepe earum, deserunt possimus impedit doloremque quibusdam reprehenderit delectus repudiandae.
             </div>
         </div>
-    </section>
+    </div>
+    
 
-    <!-- Import Vendor Script -->
-    <script type="text/javascript" src="js/id3.min.js"></script>
-    <script type="text/javascript" src="js/pulse.js"></script>
-    <script type="text/javascript">
-        var wave = Pulse.init({
-            type   : 'bars',
-            player : '#audio',
-            source : '#source',
-            target : '#visualizer',
-            debug  : false
-        });
-    </script>
 </body>
 </html>

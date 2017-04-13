@@ -1,0 +1,32 @@
+@import "global/flat.scss";
+@import "global/function.scss";
+
+// Header
+.pulse-header {
+	background-color: $peterriver;
+	border: 0;
+
+	.navbar-brand {
+		background-color: darken($peterriver, 3%);
+	}
+}
+
+// Player
+.pulse-player {
+	background-color: $peterriver;
+	border: 0;
+}
+
+// Sidebar
+.pulse-sidebar {
+	padding: 50px 0;
+	height: 100vh;
+	background-color: $clouds;
+}
+
+// Content
+.pulse-content {
+	padding: 0;
+}
+
+
