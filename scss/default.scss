@@ -1,6 +1,11 @@
 @import "global/flat.scss";
 @import "global/function.scss";
 
+
+.no-padding {
+	padding: 0;
+}
+
 // Header
 .pulse-header {
 	background-color: $peterriver;
@@ -26,7 +31,7 @@
 
 // Content
 .pulse-content {
-	padding: 0;
+
 }
 
 
