@@ -103,7 +103,6 @@ var Pulse = {
 					});
 
 					id3(files[0], function(err, tags) {
-						console.log(err, tags);
 						if (!err) {
 							document.querySelector('.pulse__song--title').innerHTML = tags.title;
 							document.querySelector('.pulse__song--artist').innerHTML = tags.artist;
@@ -152,7 +151,6 @@ var Pulse = {
 
 		self.getElement(element, function(res) {
 			res.addEventListener("canplay", function() {
-				console.log(context);
 			    if (self.isUndefined(context.mediaElement)) {
 			    	var source = context.createMediaElementSource(res);
 			    } else {
