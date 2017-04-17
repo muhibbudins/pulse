@@ -52,7 +52,6 @@
       width: 120px;
       height: 120px;
       overflow: hidden;
-      opacity: 0.6;
       margin-bottom: 15px;
       animation: spin 8s linear infinite; }
       .hero .pulse__song .pulse__song--image img {
