@@ -1,4 +1,4 @@
-![Preview](https://muhibbudins.github.io/Pulse/previews.png)
+![Preview](https://muhibbudins.github.io/Pulse/preview.png)
 
 # Pulse
 HTML 5 Song Player base on Bootstrap and Vanilla JS. Currently i not use jQuery just HTML 5 & JS for player and visualizer.
@@ -14,7 +14,7 @@ Currently nothing to show here, just choose your music from input file and visua
 - Visualizer using Audio Context
 - Player using Audio Tag HTML 5
 - Play song using input file
-- Showing meta data file using ID3 JS
+- Showing meta data file using Meta Data Audio Parser
 
 ## Todos
 - New player design
@@ -24,9 +24,7 @@ Currently nothing to show here, just choose your music from input file and visua
 - Third APIs
 
 ## Third Party Library
-- ID3 JS
-- Bootstrap
-- Animate CSS
+- [Meta Data Audio Parser](https://github.com/nazar-pc/metadata-audio-parser)
 
 ## About License
 This project will be open source everytime and i hope this project always under MIT License (feel free to contribute, changing, sublicense and everything what you want). Thanks for coming and see my project.

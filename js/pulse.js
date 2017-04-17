@@ -102,21 +102,19 @@ var Pulse = {
 						self.stream(bars);
 					});
 
-					id3(files[0], function(err, tags) {
-						if (!err) {
-							document.querySelector('.pulse__song--title').innerHTML = tags.title;
-							document.querySelector('.pulse__song--artist').innerHTML = tags.artist;
+					parse_audio_metadata(files[0], function(meta) {
+						document.querySelector('.pulse__song--title').innerHTML = meta.title;
+						document.querySelector('.pulse__song--artist').innerHTML = meta.artist;
 
-							if (!self.isUndefined(tags.v2.image)) {
-								self.arrayBufferToBase64(new Uint8Array(tags.v2.image.data), function(res) {
-									setTimeout(function() {
-										document.querySelector('.pulse__song--image').innerHTML = '<img src="data:'+ tags.v2.image.mime +';base64,'+ res +'" alt="Dummy Image" />';
-									}, 3000);
-								})
-							} else {
-								document.querySelector('.pulse__song--image').innerHTML = '<img src="img/120x120.png" alt="Dummy Image" />';
-							}
+						if (!self.isUndefined(meta.picture)) {
+							self.blobToDataURL(meta.picture, function(res) {
+								document.querySelector('.pulse__song--image').innerHTML = '<img src="'+ res +'" alt="Dummy Image" />';
+							})
+						} else {
+							document.querySelector('.pulse__song--image').innerHTML = '<img src="img/120x120.png" alt="Dummy Image" />';
 						}
+					}, function(err) {
+						console.warn(err);
 					});
 
 
@@ -129,14 +127,12 @@ var Pulse = {
 	/*
 	 * Converting array buffer to base64 string
 	 */
-	arrayBufferToBase64(buffer, callback) {
-	    var binary = '';
-	    var bytes = new Uint8Array( buffer );
-	    var len = bytes.byteLength;
-	    for (var i = 0; i < len; i++) {
-	        binary += String.fromCharCode( bytes[ i ] );
+	blobToDataURL(blob, callback) {
+	    var fr = new FileReader();
+	    fr.onload = function(e) {
+	    	callback(e.target.result);
 	    }
-	    callback(window.btoa( binary ));
+	    fr.readAsDataURL(blob);
 	},
 
 	/*
